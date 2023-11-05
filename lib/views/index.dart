@@ -5,6 +5,8 @@ import 'package:parking_system/blocs/car_bloc.dart';
 import 'package:parking_system/blocs/parking_lot_bloc.dart';
 import 'package:parking_system/common/bottom_button.dart';
 import 'package:parking_system/common/list_car_parking.dart';
+import 'package:parking_system/models/car_parking_model.dart';
+import 'package:parking_system/models/parking_model.dart';
 
 class IndesScreen extends StatefulWidget {
   const IndesScreen({Key? key}) : super(key: key);
@@ -44,7 +46,7 @@ class _IndesScreenState extends State<IndesScreen> {
       ],
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('testing'),
+          title: const Text('Parking Management App'),
         ),
         body: BlocListener<CarParkingBloc, CarParkingState>(
           listener: (BuildContext context,
@@ -78,11 +80,17 @@ class _IndesScreenState extends State<IndesScreen> {
             } else if (state.isError) {
               return const Center(child: Text("No Parking Data Available"));
             } else {
+              ParkingLot? activeParkingLot =
+                  _parkingLotbloc.getActiveParkingLot();
+              if (activeParkingLot != null) {
+                _carParkingBloc
+                    .assignPrefilledCar(_parkingLotbloc.getfilledParkingSlot());
+              }
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(state.parkinglot?.name ?? ''),
+                    Text(activeParkingLot?.name ?? ''),
                     BlocBuilder<CarParkingBloc, CarParkingState>(builder:
                         (BuildContext context,
                             CarParkingState carParkingState) {

@@ -4,39 +4,73 @@ import 'package:parking_system/common/common_functions.dart';
 import 'package:parking_system/models/car_parking_model.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
+import 'package:http/http.dart' as http;
 
 class CarParkingRepository {
-  static const String baseUrl = "http://parkingservice.com";
-  static const String apiKey = "apiKey=<PLACE_API_KEY_HERE>";
+  static const String baseUrl = "http://192.168.0.178:3000";
 
   Future<CarParkingModel?> assignCarParking(
       CarParkingDetailsParams params) async {
-    var response = await getRandomResponse(params.size);
-    // Future.
-
-    late String floor;
-    late String bayId;
+    var url = Uri.parse(
+        '$baseUrl/api/assignParkingSpace?size=${params.size}&parkingId=${params.parkingLotId}');
+    var response = await http.post(url);
     try {
-      List<String> splitString = response.split(':');
-      floor = splitString.first;
-      bayId = splitString.last;
-      int floorInt = int.tryParse(floor) ?? -1;
-      if (floorInt == -1) {
-        return null;
+      if (response.statusCode == 200) {
+        var parsedJson = json.decode(response.body);
+        if (parsedJson["success"]) {
+          String responseString = parsedJson["response"]["string"];
+          List<String> splitString = responseString.split(':');
+          String floor = splitString.first;
+          String bayId = splitString[1];
+          int floorInt = int.tryParse(floor) ?? -1;
+          if (floorInt == -1) {
+            return null;
+          }
+          var uuid = parsedJson["response"]['carModel']['carId'];
+          var baySize = parsedJson["response"]['carModel']['parkingSize'];
+          return CarParkingModel(
+            floorInt,
+            bayId,
+            convertStringToEnum(params.size),
+            true,
+            uuid,
+            params.size,
+            baySize,
+          );
+        }
       }
-      var uuid = const Uuid();
-
-      return CarParkingModel(floorInt, bayId, convertStringToEnum(params.size),
-          true, uuid.v4(), params.size);
     } catch (e) {
       return null;
     }
   }
 
-  Future<bool> unAssignCarParking(CarParkingUnassignParams params) async {
-    var response = await getUnAssign(params.bayId);
-    // Future.
-    return response;
+  Future<CarParkingModel?> unAssignCarParking(
+      CarParkingUnassignParams params) async {
+    try {
+      var url = Uri.parse(
+          '$baseUrl/api/unAssignParking?parkingLotId=${params.parkingLotId}&bayId=${params.bayId}');
+      var response = await http.post(url);
+
+      if (response.statusCode == 200) {
+        var parsedJson = json.decode(response.body);
+        if (parsedJson["success"]) {
+          dynamic carModel = parsedJson["response"];
+          return CarParkingModel(
+            carModel['floor'],
+            carModel['bayId'],
+            convertStringToEnum(carModel['carSize']),
+            false,
+            carModel['carId'],
+            carModel['carSize'],
+            carModel['baySize'],
+          );
+        }
+      }
+      // Future.
+      return null;
+    } catch (e) {
+      return null;
+    }
   }
 
   Future<bool> getUnAssign(String bayId) async {

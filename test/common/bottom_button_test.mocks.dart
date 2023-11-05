@@ -5,14 +5,14 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i4;
 
-import 'package:flutter_bloc/flutter_bloc.dart' as _i7;
+import 'package:flutter_bloc/flutter_bloc.dart' as _i8;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:parking_system/blocs/car_bloc.dart' as _i2;
 import 'package:parking_system/blocs/parking_lot_bloc.dart' as _i3;
 import 'package:parking_system/models/bay_model.dart' as _i9;
-import 'package:parking_system/models/car_parking_model.dart' as _i8;
-import 'package:parking_system/models/parking_model.dart' as _i6;
-import 'package:parking_system/repository/car_parking_repo.dart' as _i5;
+import 'package:parking_system/models/car_parking_model.dart' as _i5;
+import 'package:parking_system/models/parking_model.dart' as _i7;
+import 'package:parking_system/repository/car_parking_repo.dart' as _i6;
 import 'package:parking_system/repository/parking_repo.dart' as _i10;
 
 // ignore_for_file: type=lint
@@ -87,7 +87,18 @@ class MockCarParkingBloc extends _i1.Mock implements _i2.CarParkingBloc {
       ) as bool);
 
   @override
-  void assignParkingSpace(_i5.CarParkingDetailsParams? params) =>
+  void assignPrefilledCar(
+          List<_i5.CarParkingModel>? carParkingListFromParkingbloc) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #assignPrefilledCar,
+          [carParkingListFromParkingbloc],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void assignParkingSpace(_i6.CarParkingDetailsParams? params) =>
       super.noSuchMethod(
         Invocation.method(
           #assignParkingSpace,
@@ -97,7 +108,7 @@ class MockCarParkingBloc extends _i1.Mock implements _i2.CarParkingBloc {
       );
 
   @override
-  void deleteParkingSpace(_i5.CarParkingUnassignParams? params) =>
+  void deleteParkingSpace(_i6.CarParkingUnassignParams? params) =>
       super.noSuchMethod(
         Invocation.method(
           #deleteParkingSpace,
@@ -107,7 +118,7 @@ class MockCarParkingBloc extends _i1.Mock implements _i2.CarParkingBloc {
       );
 
   @override
-  void assignCarparkingSpace(_i6.ParkingLot? parkingLot) => super.noSuchMethod(
+  void assignCarparkingSpace(_i7.ParkingLot? parkingLot) => super.noSuchMethod(
         Invocation.method(
           #assignCarparkingSpace,
           [parkingLot],
@@ -116,7 +127,7 @@ class MockCarParkingBloc extends _i1.Mock implements _i2.CarParkingBloc {
       );
 
   @override
-  void carParkingRepositoryVariable(_i5.CarParkingRepository? mockRepository) =>
+  void carParkingRepositoryVariable(_i6.CarParkingRepository? mockRepository) =>
       super.noSuchMethod(
         Invocation.method(
           #carParkingRepositoryVariable,
@@ -154,8 +165,8 @@ class MockCarParkingBloc extends _i1.Mock implements _i2.CarParkingBloc {
 
   @override
   void on<E extends _i2.CarParkingEvent>(
-    _i7.EventHandler<E, _i2.CarParkingState>? handler, {
-    _i7.EventTransformer<E>? transformer,
+    _i8.EventHandler<E, _i2.CarParkingState>? handler, {
+    _i8.EventTransformer<E>? transformer,
   }) =>
       super.noSuchMethod(
         Invocation.method(
@@ -168,7 +179,7 @@ class MockCarParkingBloc extends _i1.Mock implements _i2.CarParkingBloc {
 
   @override
   void onTransition(
-          _i7.Transition<_i2.CarParkingEvent, _i2.CarParkingState>?
+          _i8.Transition<_i2.CarParkingEvent, _i2.CarParkingState>?
               transition) =>
       super.noSuchMethod(
         Invocation.method(
@@ -189,7 +200,7 @@ class MockCarParkingBloc extends _i1.Mock implements _i2.CarParkingBloc {
       ) as _i4.Future<void>);
 
   @override
-  void onChange(_i7.Change<_i2.CarParkingState>? change) => super.noSuchMethod(
+  void onChange(_i8.Change<_i2.CarParkingState>? change) => super.noSuchMethod(
         Invocation.method(
           #onChange,
           [change],
@@ -269,7 +280,16 @@ class MockParkingLotBloc extends _i1.Mock implements _i3.ParkingLotBloc {
       );
 
   @override
-  void updateBayModelList(List<_i8.CarParkingModel>? list) =>
+  List<_i5.CarParkingModel> getfilledParkingSlot() => (super.noSuchMethod(
+        Invocation.method(
+          #getfilledParkingSlot,
+          [],
+        ),
+        returnValue: <_i5.CarParkingModel>[],
+      ) as List<_i5.CarParkingModel>);
+
+  @override
+  void updateBayModelList(List<_i5.CarParkingModel>? list) =>
       super.noSuchMethod(
         Invocation.method(
           #updateBayModelList,
@@ -326,8 +346,8 @@ class MockParkingLotBloc extends _i1.Mock implements _i3.ParkingLotBloc {
 
   @override
   void on<E extends _i3.ParkingLotEvents>(
-    _i7.EventHandler<E, _i3.ParkingLotState>? handler, {
-    _i7.EventTransformer<E>? transformer,
+    _i8.EventHandler<E, _i3.ParkingLotState>? handler, {
+    _i8.EventTransformer<E>? transformer,
   }) =>
       super.noSuchMethod(
         Invocation.method(
@@ -340,7 +360,7 @@ class MockParkingLotBloc extends _i1.Mock implements _i3.ParkingLotBloc {
 
   @override
   void onTransition(
-          _i7.Transition<_i3.ParkingLotEvents, _i3.ParkingLotState>?
+          _i8.Transition<_i3.ParkingLotEvents, _i3.ParkingLotState>?
               transition) =>
       super.noSuchMethod(
         Invocation.method(
@@ -361,7 +381,7 @@ class MockParkingLotBloc extends _i1.Mock implements _i3.ParkingLotBloc {
       ) as _i4.Future<void>);
 
   @override
-  void onChange(_i7.Change<_i3.ParkingLotState>? change) => super.noSuchMethod(
+  void onChange(_i8.Change<_i3.ParkingLotState>? change) => super.noSuchMethod(
         Invocation.method(
           #onChange,
           [change],

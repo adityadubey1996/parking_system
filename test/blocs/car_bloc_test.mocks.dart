@@ -41,27 +41,15 @@ class MockCarParkingRepository extends _i1.Mock
       ) as _i3.Future<_i4.CarParkingModel?>);
 
   @override
-  _i3.Future<bool> unAssignCarParking(_i2.CarParkingUnassignParams? params) =>
+  _i3.Future<_i4.CarParkingModel?> unAssignCarParking(
+          _i2.CarParkingUnassignParams? params) =>
       (super.noSuchMethod(
         Invocation.method(
           #unAssignCarParking,
           [params],
         ),
-        returnValue: _i3.Future<bool>.value(false),
-      ) as _i3.Future<bool>);
-
-  @override
-  String? getAvailableSpace(
-    List<String>? list,
-    dynamic data,
-  ) =>
-      (super.noSuchMethod(Invocation.method(
-        #getAvailableSpace,
-        [
-          list,
-          data,
-        ],
-      )) as String?);
+        returnValue: _i3.Future<_i4.CarParkingModel?>.value(),
+      ) as _i3.Future<_i4.CarParkingModel?>);
 
   @override
   _i3.Future<bool> getUnAssign(String? bayId) => (super.noSuchMethod(

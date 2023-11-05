@@ -29,13 +29,13 @@ class MockParkingRepo extends _i1.Mock implements _i2.ParkingRepo {
   }
 
   @override
-  _i3.Future<_i4.ParkingLot?> getCarParkingModel() => (super.noSuchMethod(
+  _i3.Future<List<_i4.ParkingLot>?> getCarParkingModel() => (super.noSuchMethod(
         Invocation.method(
           #getCarParkingModel,
           [],
         ),
-        returnValue: _i3.Future<_i4.ParkingLot?>.value(),
-      ) as _i3.Future<_i4.ParkingLot?>);
+        returnValue: _i3.Future<List<_i4.ParkingLot>?>.value(),
+      ) as _i3.Future<List<_i4.ParkingLot>?>);
 
   @override
   _i3.Future<bool> unAssignCarParking(_i2.CarParkingUnassignParams? params) =>

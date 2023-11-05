@@ -6,6 +6,7 @@ import 'package:parking_system/repository/car_parking_repo.dart';
 enum CarParkingEvent {
   assignParkingSpace,
   unAssignParkingSpace,
+  assignPrefilledCar,
 }
 
 class CarParkingState {
@@ -39,11 +40,21 @@ class CarParkingState {
 class CarParkingBloc extends Bloc<CarParkingEvent, CarParkingState> {
   CarParkingDetailsParams? _assignParams;
   CarParkingUnassignParams? _unAssignparams;
+  late List<CarParkingModel> _carParkingListFromParkingbloc;
   CarParkingRepository _carParkingRepository = CarParkingRepository();
 
   CarParkingBloc() : super(CarParkingState()) {
     on<CarParkingEvent>((event, emit) async {
       switch (event) {
+        case CarParkingEvent.assignPrefilledCar:
+          emit(CarParkingState(
+            isLoading: false,
+            isLoaded: true,
+            isErrorWhileAssigningParkingSpace: false,
+            carParking: _carParkingListFromParkingbloc,
+            hasAdded: true,
+          ));
+          break;
         case CarParkingEvent.assignParkingSpace:
           emit(CarParkingState(
             isLoading: true,
@@ -52,10 +63,10 @@ class CarParkingBloc extends Bloc<CarParkingEvent, CarParkingState> {
             hasAdded: true,
           ));
           CarParkingDetailsParams params = _assignParams!;
-          CarParkingModel? user =
+          CarParkingModel? carParkingResponse =
               await _carParkingRepository.assignCarParking(params);
 
-          if (user == null) {
+          if (carParkingResponse == null) {
             emit(CarParkingState(
                 isLoading: false,
                 isLoaded: true,
@@ -67,11 +78,14 @@ class CarParkingBloc extends Bloc<CarParkingEvent, CarParkingState> {
                 isLoading: false,
                 isLoaded: true,
                 isErrorWhileAssigningParkingSpace: false,
-                carParking: [user],
+                carParking: [carParkingResponse],
                 hasAdded: true,
               ));
             } else {
-              List<CarParkingModel> carParking = [...state.carParking, user];
+              List<CarParkingModel> carParking = [
+                ...state.carParking,
+                carParkingResponse
+              ];
               emit(CarParkingState(
                 isLoading: false,
                 isLoaded: true,
@@ -92,19 +106,24 @@ class CarParkingBloc extends Bloc<CarParkingEvent, CarParkingState> {
           break;
 
         case CarParkingEvent.unAssignParkingSpace:
-          emit(CarParkingState(isLoaded: false, isLoading: true));
+          emit(CarParkingState(
+            isLoaded: false,
+            isLoading: true,
+            carParking: state.carParking,
+          ));
           CarParkingUnassignParams params = _unAssignparams!;
 
-          bool isSuccessful =
+          CarParkingModel? isSuccessful =
               await _carParkingRepository.unAssignCarParking(params);
-          if (isSuccessful) {
+          if (isSuccessful != null) {
             int index = state.carParking
                 .indexWhere((element) => element.bayId == params.bayId);
             if (index == -1) {
               emit(CarParkingState(
                   isLoading: true,
                   isLoaded: false,
-                  isErrorWhileUnAssigningParkingSpace: true));
+                  isErrorWhileUnAssigningParkingSpace: true,
+                  carParking: []));
             } else {
               CarParkingModel updatedCarModel = state.carParking[index];
 
@@ -118,7 +137,12 @@ class CarParkingBloc extends Bloc<CarParkingEvent, CarParkingState> {
                   isErrorWhileUnAssigningParkingSpace: true));
             }
           }
-          emit(CarParkingState(isLoading: false, isLoaded: true));
+          emit(CarParkingState(
+            isLoading: false,
+            isLoaded: true,
+            carParking: state.carParking,
+            isErrorWhileUnAssigningParkingSpace: true,
+          ));
           break;
       }
     });
@@ -126,6 +150,11 @@ class CarParkingBloc extends Bloc<CarParkingEvent, CarParkingState> {
 
   @override
   CarParkingState get initialState => CarParkingState();
+
+  void assignPrefilledCar(List<CarParkingModel> carParkingListFromParkingbloc) {
+    _carParkingListFromParkingbloc = carParkingListFromParkingbloc;
+    add(CarParkingEvent.assignPrefilledCar);
+  }
 
   void assignParkingSpace(CarParkingDetailsParams params) {
     _assignParams = params;
