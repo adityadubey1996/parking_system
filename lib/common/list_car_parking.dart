@@ -78,7 +78,7 @@ class _ListViewCarParkState extends State<ListViewCarPark> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                  'parkingSize: ${widget.carParkingState.carParking[index].parkingSize} ',
+                                  'parkingSize: ${widget.carParkingState.carParking[index].baySize} ',
                                   textAlign: TextAlign.start),
                               const SizedBox(
                                 height: 20,

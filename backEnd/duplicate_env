@@ -1,0 +1,2 @@
+MONGODB_URL = mongodb+srv://<userName>:<password>@cluster0.bzu5sg9.mongodb.net/
+PORT = 3500

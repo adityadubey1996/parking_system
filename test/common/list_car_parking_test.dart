@@ -19,8 +19,10 @@ void main() {
       mockParkingLotBloc = MockParkingLotBloc();
       carParkingState = CarParkingState(
         carParking: [
-          CarParkingModel(1, 'B1', ParkingSize.small, true, 'Car1', 'Small'),
-          CarParkingModel(2, 'B2', ParkingSize.medium, true, 'Car2', 'Medium'),
+          CarParkingModel(
+              1, 'B1', ParkingSize.small, true, 'Car1', 'Small', 'Small'),
+          CarParkingModel(
+              2, 'B2', ParkingSize.medium, true, 'Car2', 'Medium', 'Medium'),
         ],
       );
     });
@@ -31,8 +33,10 @@ void main() {
       mockParkingLotBloc = MockParkingLotBloc();
       carParkingState = CarParkingState(
         carParking: [
-          CarParkingModel(1, 'B1', ParkingSize.small, true, 'Car1', 'Small'),
-          CarParkingModel(2, 'B2', ParkingSize.medium, true, 'Car2', 'Medium'),
+          CarParkingModel(
+              1, 'B1', ParkingSize.small, true, 'Car1', 'Small', 'Small'),
+          CarParkingModel(
+              2, 'B2', ParkingSize.medium, true, 'Car2', 'Medium', "Medium"),
         ],
       );
       await tester.pumpWidget(
@@ -57,8 +61,10 @@ void main() {
       mockParkingLotBloc = MockParkingLotBloc();
       carParkingState = CarParkingState(
         carParking: [
-          CarParkingModel(1, 'B1', ParkingSize.small, true, 'Car1', 'Small'),
-          CarParkingModel(2, 'B2', ParkingSize.medium, true, 'Car2', 'Medium'),
+          CarParkingModel(
+              1, 'B1', ParkingSize.small, true, 'Car1', 'Small', 'Small'),
+          CarParkingModel(
+              2, 'B2', ParkingSize.medium, true, 'Car2', 'Medium', 'Medium'),
         ],
       );
       await tester.pumpWidget(

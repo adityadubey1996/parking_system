@@ -25,10 +25,11 @@ void main() {
       parkingLotBloc = ParkingLotBloc();
 
       // Mock the repository's method to return a ParkingLot model
-      when(mockRepository.getCarParkingModel())
-          .thenAnswer((_) async => ParkingLot('temp', "lot123", 1, []
-              // Add other properties based on your model
-              ));
+      when(mockRepository.getCarParkingModel()).thenAnswer((_) async => [
+            ParkingLot('temp', "lot123", 1, []
+                // Add other properties based on your model
+                )
+          ]);
 
       parkingLotBloc.getParkingLot();
 

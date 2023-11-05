@@ -10,11 +10,9 @@ import 'package:parking_system/models/parking_model.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ParkingRepo {
-  static const String baseUrl = "http://parkingservice.com";
-  static const String apiKey = "apiKey=<PLACE_API_KEY_HERE>";
+  static const String baseUrl = "http://192.168.0.178:3000";
 
-  Future<ParkingLot?> getCarParkingModel() async {
-    var url = Uri.parse(baseUrl);
+  Future<List<ParkingLot>?> getCarParkingModel() async {
     // var response = await http.get(url);
     // var file = File('assets/data/parkingModel.json');
     // print(file.readAsStringSync());
@@ -23,36 +21,40 @@ class ParkingRepo {
       final localDirectory = '${directory.path}/parkingModel.json';
       final file = File(localDirectory);
       // if (!file.existsSync()) {
-      await addDummyData();
       // }
-      final String jsonString = file.readAsStringSync();
+      var url = Uri.parse('${baseUrl}/api/getParkingLot');
 
-      var jsonUser = json.decode(jsonString) as Map<String, dynamic>;
-      if (jsonUser.containsKey('parkingId') && jsonUser['parkingId'] != null) {
-        List<BayModel> list = [];
-        String name = jsonUser['name'];
-        var parkingModel = jsonUser;
-        var parkingId = parkingModel['parkingId'];
-        int floors = parkingModel['floors'];
-        if (floors == -1) {
-          throw ('error while converting floors');
-        }
-        for (var item in parkingModel.entries) {
-          if (item.value != null && item.value is List<dynamic>) {
-            var ListofBays = item.value
-                .map((e) => BayModel(parkingId, e['bayId'],
-                    convertStringToEnum(e['size']), e['floor']))
-                .toList();
-            list.addAll([...ListofBays]);
+      var response = await http.get(url);
+      if (response.statusCode == 200) {
+        var parsedJson = json.decode(response.body);
+        if (parsedJson["success"]) {
+          List<dynamic> parkingModel = parsedJson["response"];
+          List<BayModel> list = [];
+          List<ParkingLot> parkingList = [];
+          for (var parking in parkingModel) {
+            List<BayModel> listForParking = [];
+            parking["listOfBayModel"].forEach((e) => listForParking.add(
+                BayModel(
+                    parking["parkingLotId"],
+                    e['bayId'],
+                    convertStringToEnum(e['size']),
+                    e['floorNumber'],
+                    e['isFilled'],
+                    e['carId'],
+                    e['carSize'])));
+            list.addAll(listForParking);
+            parkingList.add(ParkingLot('testing', parking["parkingLotId"],
+                parking["numberOfFloors"], listForParking));
           }
+          return parkingList;
         }
-        return ParkingLot(name, parkingId, floors, list);
+        return null;
       }
+      return null;
     } catch (e) {
       print('error $e');
       return null;
     }
-    return null;
   }
 
   Future<bool> unAssignCarParking(CarParkingUnassignParams params) async {

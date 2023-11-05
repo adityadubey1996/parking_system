@@ -8,6 +8,7 @@ class CarParkingModel {
     this.isFilled,
     this.carId,
     this.carSize,
+    this.baySize,
   );
   int floor;
   String? bayId;
@@ -15,4 +16,5 @@ class CarParkingModel {
   bool isFilled = false;
   String? carId;
   String? carSize;
+  String baySize;
 }

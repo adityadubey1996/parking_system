@@ -1,4 +1,3 @@
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -27,7 +26,8 @@ void main() {
 
       // Mock the HTTP response
       when(mockRepository.assignCarParking(params)).thenAnswer((_) async =>
-          CarParkingModel(1, 'A1', ParkingSize.small, true, 'test', 'small'));
+          CarParkingModel(
+              1, 'A1', ParkingSize.small, true, 'test', 'small', 'small'));
 
       final carParkingModel = await mockRepository.assignCarParking(params);
 
@@ -45,13 +45,17 @@ void main() {
       final params = CarParkingUnassignParams("parkingLotId", "A1");
 
       // Mock the HTTP response
-      when(mockRepository.unAssignCarParking(params))
-          .thenAnswer((_) async => true);
+      when(mockRepository.unAssignCarParking(params)).thenAnswer((_) async =>
+          CarParkingModel(
+              -1, null, ParkingSize.none, false, null, null, 'small'));
 
       final result = await mockRepository.unAssignCarParking(params);
 
       // Verify that the method returned true
-      expect(result, true);
+      expect(
+          result,
+          CarParkingModel(
+              -1, null, ParkingSize.none, false, null, null, 'small'));
     });
 
     test('getUnAssign returns false', () async {
@@ -60,7 +64,7 @@ void main() {
 
       // Mock the HTTP response
       when(mockRepository.unAssignCarParking(params))
-          .thenAnswer((_) async => false);
+          .thenAnswer((_) async => null);
 
       final result = await mockRepository.unAssignCarParking(params);
 

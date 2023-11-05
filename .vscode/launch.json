@@ -5,6 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "pwa-node",
+            "request": "launch",
+            "name": "Launch Server",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "cwd": "${workspaceRoot}/backEnd",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run", "dev"
+            ],
+        },
+        {
             "name": "parking_system",
             "request": "launch",
             "type": "dart",
